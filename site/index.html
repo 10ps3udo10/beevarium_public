@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beevarium - gestion de ruchers</title>
+<meta name="description" content="Beevarium : ruchers, ruches, reines, visites hors ligne, recoltes, materiel et statistiques, pense pour le terrain. Beta sur invitation.">
+<link rel="icon" href="assets/logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@700&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Memes couleurs que l'application. */
+  :root {
+    --bg: #f8f5ed;
+    --bg-alt: #eef3ea;
+    --ink: #2f302d;
+    --muted: #626761;
+    --card: #fffdf6;
+    --line: #d9d6cc;
+    --sage-dark: #425348;
+    --accent: #b88b2f;
+    --accent-soft: #f3e6c8;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Nunito Sans", system-ui, sans-serif; color: var(--ink); background: var(--bg); line-height: 1.55; }
+  a { color: var(--sage-dark); }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 0; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+  .brand img { width: 44px; height: 44px; border-radius: 12px; background: #fff; }
+  .brand span { font-family: "Kalam", cursive; font-size: 1.6rem; }
+  .btn { display: inline-block; padding: 0.7rem 1.15rem; border-radius: 999px; font-weight: 800; text-decoration: none; border: 2px solid var(--sage-dark); }
+  .btn-primary { background: var(--sage-dark); color: #fff; }
+  .btn-ghost { color: var(--sage-dark); background: transparent; }
+  .hero { display: grid; gap: 32px; align-items: center; padding: 32px 0 56px; }
+  .hero h1 { font-size: clamp(2rem, 6vw, 3.2rem); line-height: 1.1; margin: 0 0 16px; }
+  .hero p.lead { font-size: 1.15rem; color: var(--muted); margin: 0 0 24px; max-width: 34em; }
+  .badge { display: inline-block; background: var(--accent-soft); color: #6b4f12; font-weight: 800; font-size: 0.85rem; padding: 0.25rem 0.7rem; border-radius: 999px; margin-bottom: 16px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+  .hero-visual { justify-self: center; width: min(320px, 80vw); aspect-ratio: 1; border-radius: 32px; background: #fff; box-shadow: 0 18px 40px rgba(47, 48, 45, 0.12); display: grid; place-items: center; }
+  .hero-visual img { width: 82%; }
+  section.band { background: var(--bg-alt); padding: 48px 0; }
+  h2 { font-size: 1.6rem; margin: 0 0 24px; }
+  .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 20px; }
+  .card h3 { margin: 0 0 8px; font-size: 1.1rem; }
+  .card p { margin: 0; color: var(--muted); }
+  .steps { padding: 48px 0; }
+  .steps ol { margin: 0; padding-left: 1.2rem; display: grid; gap: 10px; }
+  .cta { text-align: center; padding: 48px 0 64px; }
+  .cta p { color: var(--muted); max-width: 36em; margin: 0 auto 24px; }
+  footer { border-top: 1px solid var(--line); padding: 24px 0 32px; color: var(--muted); font-size: 0.9rem; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; }
+  footer nav { display: flex; flex-wrap: wrap; gap: 16px; }
+  @media (min-width: 820px) {
+    .hero { grid-template-columns: 1.2fr 1fr; padding: 56px 0 80px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="brand" href="./"><img src="assets/logo.jpg" alt=""><span>Beevarium</span></a>
+    <a class="btn btn-ghost" href="https://beta.beevarium.fr/app/">Se connecter</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <span class="badge">Beta sur invitation</span>
+        <h1>Le carnet de rucher qui tient dans la poche.</h1>
+        <p class="lead">Beevarium suit vos ruchers, vos ruches, vos reines et vos recoltes. Les visites se saisissent au rucher, meme sans reseau, et se synchronisent au retour.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="mailto:contact@beevarium.fr?subject=Invitation%20a%20la%20beta%20Beevarium">Demander une invitation</a>
+          <a class="btn btn-ghost" href="#fonctions">Decouvrir</a>
+        </div>
+      </div>
+      <div class="hero-visual"><img src="assets/logo.jpg" alt="Logo Beevarium : une ruche sous cloche"></div>
+    </section>
+  </main>
+</div>
+
+<section class="band" id="fonctions">
+  <div class="wrap">
+    <h2>Tout le suivi apicole, au meme endroit</h2>
+    <div class="grid">
+      <article class="card"><h3>Ruchers et ruches</h3><p>Emplacements, formats (Dadant, ruchette...), transhumance en quelques gestes, Atelier pour les ruches rangees.</p></article>
+      <article class="card"><h3>Visites hors ligne</h3><p>Couvain, reserves, note, mouvements de cadres et tags : saisis sans reseau, envoyes une seule fois au retour.</p></article>
+      <article class="card"><h3>Reines</h3><p>Origine, race, date de mise en place, historique des remplacements et alerte des reines agees.</p></article>
+      <article class="card"><h3>Ruches a surveiller</h3><p>Reine non vue, couvain faible, visite trop ancienne : les ruches a voir en priorite remontent seules.</p></article>
+      <article class="card"><h3>Materiel</h3><p>Stock de l'Atelier par element et par format, ruche montee depuis le stock, demontage qui remet tout en stock.</p></article>
+      <article class="card"><h3>Recoltes et statistiques</h3><p>Miel par ruche et par rucher, evolution des cadres et du couvain, fiche detaillee de chaque ruche.</p></article>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <section class="steps">
+    <h2>Rejoindre la beta</h2>
+    <ol>
+      <li>Ecrivez a <a href="mailto:contact@beevarium.fr">contact@beevarium.fr</a> en indiquant votre nombre de ruches.</li>
+      <li>Recevez votre invitation et creez votre compte : toutes les fonctionnalites sont offertes pendant la beta.</li>
+      <li>Utilisez Beevarium sur le terrain et envoyez vos retours depuis l'application.</li>
+    </ol>
+  </section>
+
+  <section class="cta">
+    <h2>Une application faite avec des apiculteurs</h2>
+    <p>Beevarium est construit pas a pas avec les retours de ses utilisateurs. Les places de la beta sont limitees.</p>
+    <a class="btn btn-primary" href="mailto:contact@beevarium.fr?subject=Invitation%20a%20la%20beta%20Beevarium">Demander une invitation</a>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>Beevarium</span>
+    <nav>
+      <a href="https://beta.beevarium.fr/app/legal.html">Mentions legales</a>
+      <a href="https://beta.beevarium.fr/app/privacy.html">Confidentialite</a>
+      <a href="mailto:contact@beevarium.fr">Contact</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

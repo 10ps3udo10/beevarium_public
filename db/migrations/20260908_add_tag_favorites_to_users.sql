@@ -1,0 +1,1 @@
+ALTER TABLE users ADD COLUMN IF NOT EXISTS tag_favorites JSONB NOT NULL DEFAULT '[]'::jsonb;

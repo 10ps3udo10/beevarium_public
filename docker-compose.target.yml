@@ -1,0 +1,70 @@
+services:
+  db_target:
+    image: postgres:16-alpine
+    container_name: ${STACK_NAME:-beevarium}_db_target
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "127.0.0.1:${TARGET_POSTGRES_PORT}:5432"
+    volumes:
+      - postgres_target_data:/var/lib/postgresql/data
+      # Ne s execute que sur un volume vide: sert a initialiser un nouvel environnement.
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+    restart: unless-stopped
+
+  api_target:
+    image: ${API_IMAGE}
+    container_name: ${STACK_NAME:-beevarium}_api_target
+    depends_on:
+      db_target:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      ENVIRONMENT: ${ENVIRONMENT}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      JWT_ALGORITHM: ${JWT_ALGORITHM}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES}
+      BETA_NEW_USERS_PREMIUM: ${BETA_NEW_USERS_PREMIUM:-false}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+      MAX_REQUEST_BODY_BYTES: ${MAX_REQUEST_BODY_BYTES}
+      REQUEST_TIMEOUT_SECONDS: ${REQUEST_TIMEOUT_SECONDS}
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL}
+      PASSWORD_RESET_TTL_MINUTES: ${PASSWORD_RESET_TTL_MINUTES}
+      PASSWORD_RESET_MAX_PER_HOUR: ${PASSWORD_RESET_MAX_PER_HOUR}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USERNAME: ${SMTP_USERNAME}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_USE_TLS: ${SMTP_USE_TLS}
+      SMTP_FROM_EMAIL: ${SMTP_FROM_EMAIL}
+      SMTP_FROM_NAME: ${SMTP_FROM_NAME}
+    ports:
+      - "127.0.0.1:${TARGET_API_PORT}:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+    restart: unless-stopped
+
+volumes:
+  postgres_target_data:
+    # Nom fige: le volume ne doit pas dependre du repertoire de deploiement.
+    name: ${STACK_NAME:-beevarium}_target_data

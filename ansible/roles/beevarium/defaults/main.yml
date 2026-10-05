@@ -1,0 +1,6 @@
+---
+beevarium_env_file: .env
+beevarium_api_base_url: http://localhost:8000
+beevarium_run_migrations: false
+beevarium_bootstrap_demo: true
+beevarium_run_gate: true

@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+ansible/.venv/
+
+# Environment
+.env
+.env.target
+backend/.env
+
+# VS Code
+.vscode/*
+!.vscode/tasks.json
+.DS_Store
+
+# Local smoke artifacts
+artifacts/
+
+# Runtime-generated local demo credentials
+backend/app/static/app/demo-access.json
+
+# Docker
+postgres_data/
+letsencrypt/
+
+# Dependances des tests de parcours
+node_modules/
+package-lock.json
+test-results/
+
+# Acces d exploitation locaux (IP, comptes)
+AGENTS.local.md

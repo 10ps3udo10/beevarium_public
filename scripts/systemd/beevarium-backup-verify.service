@@ -1,0 +1,7 @@
+[Unit]
+Description=Beevarium - verification de restauration de la derniere sauvegarde
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/app
+ExecStart=/bin/bash scripts/linux/backup_verify.sh "" artifacts/backups

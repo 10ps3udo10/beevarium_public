@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Beevarium - Client V1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="bg-shape bg-shape-1"></div>
+  <div class="bg-shape bg-shape-2"></div>
+
+  <header class="hero app-shell-header">
+    <a class="brand-lockup" id="brand-home" href="#" aria-label="Beevarium, retour au tableau de bord">
+      <img class="brand-mark" src="./assets/logo-sans-texte.jpg" alt="">
+      <img class="brand-wordmark" src="./assets/texte-beevarium.jpg" alt="Beevarium">
+    </a>
+    <div class="hero-heading shell-topline">
+      <div class="hero-tools">
+        <span class="environment-pill" id="environment-pill"></span>
+        <details class="profile-menu" id="profile-menu" hidden>
+          <summary id="profile-pill">Profil</summary>
+          <div class="profile-popover">
+            <strong id="profile-email">-</strong>
+            <span id="profile-plan" class="hint">Compte</span>
+            <button id="btn-edit-profile" class="btn btn-ghost" type="button">Modifier mes informations</button>
+            <button id="btn-tag-settings" class="btn btn-ghost" type="button">Reglages tags</button>
+            <button id="btn-open-help" class="btn btn-ghost" type="button">Aide</button>
+            <button id="btn-logout" class="btn btn-ghost" type="button">Se deconnecter</button>
+          </div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <details class="card stack diagnostic-card" id="config-card" hidden>
+      <summary>Parametres techniques</summary>
+      <h2>Acces API</h2>
+      <div class="row">
+        <label for="env-select">Profil</label>
+        <select id="env-select"></select>
+      </div>
+      <div class="row">
+        <label for="override-url">URL personnalisee</label>
+        <input id="override-url" type="url" placeholder="http://localhost:8000">
+      </div>
+      <div class="actions">
+        <button id="save-config" class="btn btn-secondary">Enregistrer la configuration</button>
+      </div>
+      <p class="hint" id="config-hint"></p>
+    </details>
+
+    <section class="card stack login-card" id="auth-card">
+      <p class="eyebrow">Beevarium</p>
+      <h2>Connexion</h2>
+      <p class="login-intro">Retrouvez vos ruchers, vos visites et votre suivi de saison.</p>
+      <div class="row">
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="demo@example.com">
+      </div>
+      <div class="row">
+        <label for="password">Mot de passe</label>
+        <span class="password-field"><input id="password" type="password" placeholder="motdepasse123" autocomplete="current-password"><button class="password-toggle" type="button" data-password-for="password" aria-label="Afficher le mot de passe" aria-pressed="false"></button></span>
+      </div>
+      <div class="actions">
+        <button id="btn-login" class="btn">Se connecter</button>
+        <button id="btn-load-demo" class="btn btn-ghost">Utiliser un acces de demonstration</button>
+      </div>
+      <p class="hint" id="auth-hint"></p>
+      <p class="login-secondary">
+        <button id="btn-register-open" class="link-button" type="button">Creer un compte</button> · <button id="btn-forgot-open" class="link-button" type="button">Mot de passe oublie ?</button>
+      </p>
+    </section>
+
+    <section class="card stack login-card" id="forgot-card" hidden>
+      <p class="eyebrow">Beevarium</p>
+      <h2>Mot de passe oublie</h2>
+      <p class="login-intro">Indiquez votre adresse e-mail. Si un compte existe, vous recevrez un lien pour choisir un nouveau mot de passe.</p>
+      <div class="row">
+        <label for="forgot-email">Email</label>
+        <input id="forgot-email" type="email" placeholder="vous@example.com">
+      </div>
+      <div class="actions">
+        <button id="btn-forgot-submit" class="btn">Envoyer le lien</button>
+        <button id="btn-forgot-cancel" class="btn btn-ghost">Retour a la connexion</button>
+      </div>
+      <p class="hint" id="forgot-hint"></p>
+    </section>
+    <section class="card stack login-card" id="register-card" hidden>
+      <p class="eyebrow">Beevarium</p>
+      <h2>Creer un compte</h2>
+      <p class="login-intro">Pendant la beta, toutes les fonctionnalites sont offertes.</p>
+      <div class="row">
+        <label for="register-prenom">Prenom</label>
+        <input id="register-prenom" type="text" autocomplete="given-name" maxlength="100">
+      </div>
+      <div class="row">
+        <label for="register-email">Email</label>
+        <input id="register-email" type="email" autocomplete="email" placeholder="vous@example.com">
+      </div>
+      <div class="row">
+        <label for="register-password">Mot de passe (12 caracteres minimum)</label>
+        <span class="password-field"><input id="register-password" type="password" autocomplete="new-password" minlength="12"><button class="password-toggle" type="button" data-password-for="register-password" aria-label="Afficher le mot de passe" aria-pressed="false"></button></span>
+      </div>
+      <label class="check-line"><input id="register-terms" type="checkbox"> J'accepte les <a href="./terms.html" target="_blank" rel="noopener">conditions de la beta</a> et la <a href="./privacy.html" target="_blank" rel="noopener">politique de confidentialite</a>.</label>
+      <div class="actions">
+        <button id="btn-register-submit" class="btn">Creer mon compte</button>
+        <button id="btn-register-cancel" class="btn btn-ghost">Retour a la connexion</button>
+      </div>
+      <p class="hint" id="register-hint"></p>
+    </section>
+
+    <section class="card stack workspace-card" id="dashboard-card" hidden>
+      <div class="dashboard-heading">
+        <button id="btn-open-nav" class="btn btn-ghost nav-toggle" type="button" aria-controls="main-nav" aria-expanded="false" aria-label="Ouvrir la navigation"><span aria-hidden="true"></span></button>
+      </div>
+      <div id="nav-backdrop" class="nav-backdrop" hidden></div>
+      <nav id="main-nav" class="tab-nav" aria-label="Navigation principale">
+        <button id="btn-close-nav" class="btn btn-ghost nav-close" type="button">Fermer</button>
+        <button class="tab-button is-active" type="button" data-tab="dashboard" aria-selected="true">Tableau de bord</button>
+        <button class="tab-button" type="button" data-tab="ruchers" aria-selected="false">Ruchers</button>
+        <button class="tab-button" type="button" data-tab="atelier" aria-selected="false">Atelier</button>
+        <button class="tab-button" type="button" data-tab="visites" aria-selected="false">Visites</button>
+        <button class="tab-button" type="button" data-tab="stats" aria-selected="false">Statistiques</button>
+      </nav>
+      <article class="dashboard-overview" data-panel="dashboard">
+        <h3 class="dashboard-title">Tableau de bord</h3>
+        <section id="onboarding-card" class="onboarding-card" hidden>
+          <div><p class="eyebrow">Bien commencer</p><h3>Votre premier suivi en trois etapes</h3></div>
+          <p class="onboarding-intro">Beevarium s'organise en onglets : les Ruchers regroupent vos ruches, l'Atelier gere le stock et les ruches a reparer, Visites conserve le journal terrain, et Statistiques aide a suivre la saison.</p>
+          <ol class="onboarding-steps">
+            <li id="onboarding-step-rucher">Creer votre premier rucher</li>
+            <li id="onboarding-step-ruche">Ajouter vos ruches (toutes d'un coup avec la creation rapide)</li>
+            <li id="onboarding-step-visite">Enregistrer une premiere visite</li>
+          </ol>
+          <button id="btn-onboarding-next" class="btn" type="button">Creer mon premier rucher</button>
+        </section>
+        <div class="dashboard-visual-grid">
+          <section class="dashboard-sketch-card"><div class="dashboard-meter-copy"><p class="category-label">Visites <button type="button" class="info-tip" aria-label="Explication" data-tip="Part des ruches en rucher (hors Atelier) visitees au moins une fois depuis le 1er janvier.">i</button></p><p class="hint">Annee en cours</p><p class="hint" id="dashboard-visit-meter-caption"></p></div><div class="sketch-meter" id="dashboard-visit-meter"><span id="dashboard-visit-meter-label">-</span></div></section>
+          <section class="dashboard-sketch-card"><p class="category-label">Couvain moyen <button type="button" class="info-tip" aria-label="Explication" data-tip="Part des cadres occupes par du couvain, calculee sur la derniere visite de chaque ruche.">i</button></p><div class="sketch-meter" id="dashboard-brood-meter"><span id="dashboard-brood-meter-label">-</span></div></section>
+          <section class="dashboard-sketch-card"><p class="category-label">Ruches avec reine active</p><div class="sketch-meter" id="dashboard-queen-meter"><span id="dashboard-queen-meter-label">-</span></div></section>
+        </div>
+        <section class="dashboard-monthly-visits"><p class="category-label">Visites par mois · annee en cours</p><div id="dashboard-monthly-visits" class="monthly-visit-chart"><p class="hint">Chargement du graphique...</p></div></section>
+        <section class="dashboard-ledger-book">
+          <p class="category-label">Carnet rapide</p>
+          <div class="dashboard-ledger-grid">
+            <div class="metric-row"><span>Ruchers</span><strong id="dashboard-ruchers-count">-</strong></div>
+            <div class="metric-row"><span>Ruches</span><strong id="dashboard-ruches-count">-</strong></div>
+            <div class="metric-row"><span>Atelier</span><strong id="dashboard-atelier-count">-</strong></div>
+            <div class="metric-row"><span>Derniere visite</span><strong id="dashboard-last-visit">-</strong></div>
+            <div class="metric-row"><span>A revoir</span><strong id="dashboard-drafts-count">-</strong></div>
+            <div class="metric-row"><span>Sans visite (30 j)</span><strong id="dashboard-unvisited-count">-</strong></div>
+            <div class="metric-row"><span>Reines</span><strong id="dashboard-queens-count">-</strong></div>
+            <div class="metric-row"><span>Reines de plus de 2 ans</span><strong id="dashboard-old-queens">-</strong></div>
+            <div class="metric-row"><span>Age reine</span><strong id="dashboard-queen-age">-</strong></div>
+            <div class="metric-row"><span>Surveillance <button type="button" class="info-tip" aria-label="Explication" data-tip="Ruches a surveiller : reine de 2 ans ou plus, note de 2/5 ou moins, pas de ponte ou reine non vue, couvain faible en saison, visite trop ancienne (21 jours en saison, 60 jours hors saison) ou tag orpheline. Le tag a surveiller est pose et retire automatiquement.">i</button></span><strong id="dashboard-queen-alerts">-</strong></div>
+            <div class="metric-row"><span>Occupation cadres <button type="button" class="info-tip" aria-label="Explication" data-tip="Cadres occupes a la derniere visite rapportes a la capacite du corps (10 en Dadant ou Langstroth, 8 en Warre, 6 en ruchette), en moyenne sur les ruches en rucher. Une ruchette pleine compte pour 100 %.">i</button></span><strong id="dashboard-frames-average">-</strong></div>
+            <div class="metric-row"><span>References materiel <button type="button" class="info-tip" aria-label="Explication" data-tip="Nombre de couples type + format possedes, a l'atelier ou en service (ex. Corps Dadant, Toit Ruchette).">i</button></span><strong id="dashboard-material-status">-</strong></div>
+          </div>
+        </section>
+        <div id="dashboard-watchlist" class="watchlist" hidden></div>
+        <p class="hint dashboard-summary-hint" id="dashboard-summary-hint"></p>
+      </article>
+      <div class="grid-two">
+        <article data-panel="ruchers">
+          <div class="section-heading"><h3>Ruchers</h3><div class="context-actions"><button id="btn-quick-create" class="btn" type="button">Creation rapide</button><button id="btn-show-rucher-form" class="btn btn-secondary" type="button">Ajouter un rucher</button><button id="btn-import-open" class="btn btn-ghost" type="button">Importer un tableur <span class="premium-chip">Premium</span></button></div></div>
+          <label class="search-field">Rechercher<input id="rucher-search" autocomplete="off" type="search" placeholder="Nom du rucher"></label>
+          <ul id="ruchers-list" class="list"></ul>
+        </article>
+        <article class="atelier-panel" data-panel="atelier">
+          <div class="section-heading"><h3>Atelier</h3><div class="section-actions"><button id="btn-add-material" class="btn btn-secondary" type="button">Ajouter du materiel</button><button id="btn-show-atelier-ruche-form" class="btn" type="button">Ajouter une ruche</button></div></div>
+          <h4 class="atelier-section-title">Materiel <button type="button" class="info-tip" aria-label="Explication" data-tip="Stock = quantite rangee a l'atelier (saisie) + quantite en service. Corps, toits, planchers, partitions et hausses en service sont calcules depuis les ruches actives et les mouvements de hausses des visites. Les formats ne s'additionnent jamais, sauf pour les cadres et partitions : leur format est celui du cadre, une ruchette Dadant porte des cadres Dadant.">i</button></h4>
+          <div id="atelier-stock-list" class="stock-grid"><p class="hint">Stocks non charges.</p></div>
+          <h4 class="atelier-section-title">Ruches a l'atelier <button type="button" class="info-tip" aria-label="Explication" data-tip="Ruches montees et rangees a l'Atelier, sans colonie : pretes a recevoir un essaim, a etre installees dans un rucher ou a servir de contenant lors d'un transvasement. Elles ne comptent ni dans les visites ni dans les statistiques du cheptel ; leur materiel compte dans le stock (colonne ruches atelier).">i</button></h4>
+          <div id="atelier-bulk-actions" class="bulk-actions" hidden>
+            <strong><span id="atelier-selected-count">0</span> selectionnee(s)</strong>
+            <button id="btn-edit-atelier-selected" class="btn btn-secondary" type="button" hidden>Modifier</button>
+            <button id="btn-move-atelier-selected" class="btn" type="button">Deplacer</button>
+          </div>
+          <ul id="atelier-ruches-list" class="atelier-hives-grid list"></ul>
+        </article>
+        <article id="rucher-selected-panel" data-panel="ruchers" hidden>
+          <div class="section-heading rucher-selected-heading"><div><p class="eyebrow">Rucher</p><div id="rucher-detail" class="detail-grid"></div></div></div>
+          <div class="section-heading hive-list-heading"><h3>Ruches du rucher</h3><div class="context-actions"><button id="btn-edit-rucher" class="btn btn-ghost" type="button">Modifier le rucher</button><button id="btn-quick-add-hives" class="btn btn-secondary" type="button">Ajouter plusieurs ruches</button><button id="btn-show-ruche-form" class="btn" type="button">Ajouter une ruche</button></div></div>
+          <section id="ruche-context-card" class="hive-context-card" hidden>
+            <div class="context-actions">
+              <button id="btn-ruche-stats" class="btn btn-secondary" type="button">Voir les statistiques</button>
+              <button id="btn-ruche-visit" class="btn" type="button">Ajouter une visite</button>
+              <button id="btn-ruche-harvest" class="btn btn-secondary" type="button">Nouvelle recolte</button>
+              <button id="btn-ruche-move" class="btn btn-ghost" type="button">Deplacer</button>
+              <button id="btn-ruche-queen" class="btn btn-ghost" type="button">Remplacer la reine</button>
+              <button id="btn-ruche-transvasement" class="btn btn-ghost" type="button">Transvaser</button>
+              <button id="btn-ruche-edit" class="btn btn-ghost" type="button">Modifier</button>
+            </div>
+            <div class="section-heading"><div><p class="eyebrow">Ruche selectionnee</p><h4 id="ruche-context-title">Ruche selectionnee</h4></div><span id="ruche-context-status" class="status-chip">Terrain</span></div>
+            <div id="ruche-context-summary" class="detail-grid"></div>
+            <div class="hive-tags"><div class="hive-tags-header"><h4>Tags</h4><button id="btn-open-ruche-tags" class="btn btn-secondary" type="button">Ajouter des tags</button></div><div id="ruche-tags-list" class="tag-list"><p class="hint">Tags non charges.</p></div></div>
+            <div class="hive-harvests"><h4>Recoltes</h4><ul id="ruche-harvests-list" class="list"><li>Aucune recolte chargee.</li></ul></div>
+          </section>
+          <div id="rucher-bulk-actions" class="bulk-actions" hidden>
+            <strong><span id="rucher-selected-count">0</span> selectionnee(s)</strong>
+            <button id="btn-move-rucher-selected" class="btn" type="button">Deplacer</button>
+          </div>
+          <section id="ruche-secondary-actions">
+          <dialog id="ruche-dialog" class="stock-dialog">
+          <form id="ruche-form" class="stack">
+            <div class="section-heading"><div><p class="eyebrow">Ruche</p><h3 id="ruche-form-title">Ajouter une ruche</h3></div><button id="btn-cancel-ruche" class="btn btn-ghost" type="button">Fermer</button></div>
+            <input id="ruche-id" type="hidden">
+            <div class="form-grid">
+              <label>Identifiant<input id="ruche-identifiant" required maxlength="100" placeholder="Ruche-03"></label>
+              <label>Type de ruche<select id="ruche-type"><option value="">Non renseigne</option></select></label>
+              <label>Statut metier<select id="ruche-status"><option value="">Non renseigne</option></select></label>
+              <label>Format<select id="ruche-format"><option value="">Non renseigne</option><option value="dadant">Dadant</option><option value="langstroth">Langstroth</option><option value="warre">Warre</option><option value="ruchette">Ruchette</option><option value="nucleus">Nucleus</option><option value="autre">Autre</option></select></label>
+              <label>Nombre de cadres<input id="ruche-cadres" type="number" min="0" max="100" placeholder="10"></label>
+              <label>Annee de la reine<input id="ruche-reine-annee" type="number" min="1900" max="2100"></label><label>Reine en place depuis le<input id="ruche-reine-date" type="date"></label>
+              <label>Race de la reine<select id="ruche-reine-race"><option value="">Non renseignee</option><option>Buckfast</option><option>Carnica</option><option>Caucasienne</option><option>Ligustica</option><option>Noire (mellifera)</option><option>Hybride</option><option>Inconnue</option></select></label>
+              <label>Provenance de la reine<select id="ruche-reine-provenance"><option value="">Non renseignee</option><option>Elevage personnel</option><option>Achat eleveur</option><option>Essaim recupere</option><option>Division</option><option>Remerage naturel</option><option>Don ou echange</option><option>Inconnue</option></select></label>
+            </div>
+            <fieldset class="equipment-grid"><legend>Materiel present</legend><label><input id="ruche-has-corps" type="checkbox" checked> Corps</label><label><input id="ruche-has-hausse" type="checkbox"> Hausse</label><label><input id="ruche-has-partition" type="checkbox"> Partition</label><label><input id="ruche-has-grille" type="checkbox"> Grille a reine</label><label><input id="ruche-has-nourrisseur" type="checkbox"> Nourrisseur</label><label><input id="ruche-has-toit" type="checkbox" checked> Toit</label><label><input id="ruche-has-plancher" type="checkbox" checked> Plancher</label></fieldset>
+            <label id="ruche-origine-materiel-wrap">Origine du materiel<select id="ruche-origine-materiel"><option value="achat">Nouveau materiel</option><option value="stock">Stock atelier (elements coches + cadres)</option></select></label>
+            <div class="actions"><button class="btn" type="submit">Enregistrer la ruche</button></div><p id="ruche-form-hint" class="hint"></p>
+          </form>
+          </dialog>
+          <div id="queen-summary" class="queen-summary">Reine active non chargee.</div>
+          <ul id="queen-history-list" class="list"><li>Historique non charge.</li></ul>
+          <dialog id="queen-dialog" class="stock-dialog"><form id="queen-form" class="stack"><div class="section-heading"><div><p class="eyebrow">Reine</p><h3>Remplacer la reine</h3></div><button id="btn-close-queen" class="btn btn-ghost" type="button">Fermer</button></div><div class="form-grid"><label>Date de mise en place<input id="queen-date" type="date" required></label><label>Origine<select id="queen-origin"><option value="apport_reine_fecondee">Reine fecondee</option><option value="apport_reine_vierge">Reine vierge</option><option value="essaimage">Essaimage</option><option value="remerage">Remerage</option><option value="cellule_royale">Cellule royale</option></select></label><label>Race<select id="queen-race"><option value="">Non renseignee</option><option>Buckfast</option><option>Carnica</option><option>Caucasienne</option><option>Ligustica</option><option>Noire (mellifera)</option><option>Hybride</option><option>Inconnue</option></select></label><label>Provenance<select id="queen-provenance"><option value="">Non renseignee</option><option>Elevage personnel</option><option>Achat eleveur</option><option>Essaim recupere</option><option>Division</option><option>Remerage naturel</option><option>Don ou echange</option><option>Inconnue</option></select></label></div><button class="btn" type="submit">Enregistrer la nouvelle reine</button><p id="queen-form-hint" class="hint"></p></form></dialog>
+          </section>
+          <label class="search-field">Rechercher<input id="ruche-search" autocomplete="off" type="search" placeholder="Identifiant de ruche"></label>
+          <ul id="ruches-list" class="list"></ul>
+        </article>
+      </div>
+      <dialog id="stock-dialog" class="stock-dialog">
+        <form id="stock-form" method="dialog" class="stack">
+          <div class="section-heading"><div><p class="eyebrow">Inventaire</p><h3 id="stock-dialog-title">Modifier le stock</h3></div><button id="btn-close-stock" class="btn btn-ghost" type="button">Fermer</button></div>
+          <input id="stock-material-id" type="hidden">
+          <input id="stock-type-id" type="hidden">
+          <label>Type de materiel<select id="stock-type-select"></select></label>
+          <label>Format<select id="stock-format">
+                <option value="">Non renseigne</option>
+                <option value="dadant">Dadant</option>
+                <option value="langstroth">Langstroth</option>
+                <option value="warre">Warre</option>
+                <option value="ruchette">Ruchette</option>
+                <option value="nucleus">Nucleus</option>
+                <option value="autre">Autre</option>
+          </select></label>
+          <label for="stock-atelier-quantity">Quantite rangee a l atelier</label>
+          <div class="stepper"><button id="stock-quantity-minus" class="btn btn-secondary" type="button" aria-label="Retirer 1">-</button><input id="stock-atelier-quantity" type="number" inputmode="numeric" min="0" step="1" required><button id="stock-quantity-plus" class="btn btn-secondary" type="button" aria-label="Ajouter 1">+</button></div>
+          <p id="stock-quantity-note" class="field-note">Nouvelle quantite totale rangee, pas une quantite a ajouter.</p>
+          <label>Quantite en service<input id="stock-service-quantity" type="number" readonly disabled>
+            <span class="field-note">Calculee automatiquement depuis vos ruches, non modifiable.</span>
+          </label>
+          <p id="stock-form-hint" class="hint"></p>
+          <button class="btn" type="submit">Enregistrer le stock</button>
+        </form>
+      </dialog>
+      <dialog id="atelier-ruche-dialog" class="stock-dialog"><form id="atelier-ruche-form" class="stack"><div class="section-heading"><div><p class="eyebrow">Atelier</p><h3 id="atelier-ruche-dialog-title">Ajouter une ruche</h3></div><button id="btn-close-atelier-ruche" class="btn btn-ghost" type="button">Fermer</button></div><input id="atelier-ruche-id" type="hidden"><label>Identifiant<input id="atelier-ruche-identifiant" required maxlength="100" placeholder="Ruche-03"></label><label>Format<select id="atelier-ruche-format"><option value="">Non renseigne</option><option value="dadant">Dadant</option><option value="langstroth">Langstroth</option><option value="warre">Warre</option><option value="ruchette">Ruchette</option><option value="nucleus">Nucleus</option><option value="autre">Autre</option></select></label><label>Nombre de cadres<input id="atelier-ruche-cadres" type="number" min="0" max="100" placeholder="10"></label><fieldset class="equipment-grid"><legend>Materiel present</legend><label><input id="atelier-ruche-has-corps" type="checkbox" checked> Corps</label><label><input id="atelier-ruche-has-partition" type="checkbox"> Partition</label><label><input id="atelier-ruche-has-grille" type="checkbox"> Grille a reine</label><label><input id="atelier-ruche-has-nourrisseur" type="checkbox"> Nourrisseur</label><label><input id="atelier-ruche-has-toit" type="checkbox" checked> Toit</label><label><input id="atelier-ruche-has-plancher" type="checkbox" checked> Plancher</label></fieldset><label id="atelier-ruche-origine-materiel-wrap">Origine du materiel<select id="atelier-ruche-origine-materiel"><option value="achat">Nouveau materiel</option><option value="stock">Stock atelier (elements coches + cadres)</option></select></label><p id="atelier-ruche-hint" class="hint"></p><button id="atelier-ruche-submit" class="btn" type="submit">Ajouter a l'atelier</button></form></dialog>
+      <dialog id="visit-dialog" class="stock-dialog">
+        <form id="visit-edit-form" class="stack">
+          <div class="section-heading"><div><p class="eyebrow">Journal terrain</p><h3>Modifier la visite</h3></div><button id="btn-close-visit" class="btn btn-ghost" type="button">Fermer</button></div>
+          <input id="edit-visit-id" type="hidden">
+          <p id="edit-visit-context" class="hint"></p>
+          <button id="btn-edit-visit-tags" class="btn btn-secondary" type="button">Modifier les tags</button>
+          <div class="form-grid">
+            <label>Reine vue<select id="edit-visit-queen"><option value="">Non renseigne</option><option value="true">Oui</option><option value="false">Non</option></select></label>
+            <label>Ponte presente<select id="edit-visit-ponte"><option value="">Non renseigne</option><option value="true">Oui</option><option value="false">Non</option></select></label>
+            <label>Etat couvain<select id="edit-visit-brood"><option value="">Non renseigne</option><option value="faible">Faible</option><option value="normal">Normal</option><option value="excellent">Excellent</option></select></label>
+            <label>Reserves<select id="edit-visit-reserves"><option value="">Non renseigne</option><option value="critique">Critique</option><option value="correct">Correct</option><option value="abondant">Abondant</option></select></label>
+            <label>Note<input id="edit-visit-note" type="number" min="1" max="5"></label>
+            <label>Cadres couvain<input id="edit-visit-brood-frames" type="number" min="0"></label>
+            <label>Cadres totaux<input id="edit-visit-total-frames" type="number" min="0"></label>
+            <label>Statut<select id="edit-visit-status"><option value="valide">Complete</option><option value="brouillon">Brouillon</option></select></label>
+          </div>
+          <fieldset class="frame-movement-grid"><legend>Age des cadres</legend><label>Action cadre<select id="edit-visit-cadres-action"></select></label><label>Quantite<input id="edit-visit-cadres-quantite" type="number" min="1" value="1"></label><label>Annee de cire<input id="edit-visit-cadres-annee" type="number" min="1900" max="2100"></label></fieldset>
+          <fieldset class="equipment-grid"><legend>Materiel observe</legend><label><input id="edit-visit-corps" type="checkbox"> Corps</label><label class="equipment-with-count"><input id="edit-visit-hausse" type="checkbox"> Hausse<input id="edit-visit-hausse-quantite" type="number" min="1" placeholder="Nb" disabled></label><label><input id="edit-visit-partition" type="checkbox"> Partition</label><label><input id="edit-visit-grille" type="checkbox"> Grille a reine</label><label><input id="edit-visit-nourrisseur" type="checkbox"> Nourrisseur</label><label><input id="edit-visit-toit" type="checkbox"> Toit</label><label><input id="edit-visit-plancher" type="checkbox"> Plancher</label></fieldset>
+          <div id="edit-visit-tag-suggestions" class="tag-suggestions" hidden></div>
+          <p id="edit-visit-hint" class="hint"></p>
+          <button class="btn" type="submit">Enregistrer les modifications</button>
+        </form>
+      </dialog>
+      <dialog id="profile-dialog" class="stock-dialog">
+        <form id="profile-form" class="stack">
+          <div class="section-heading"><div><p class="eyebrow">Profil</p><h3>Mes informations</h3></div><button id="btn-close-profile" class="btn btn-ghost" type="button">Fermer</button></div>
+          <label>Prenom<input id="profile-first-name" maxlength="100"></label>
+          <label>Email<input id="profile-email-readonly" type="email" readonly></label>
+          <p class="hint">L’email de connexion ne peut pas être modifié ici.</p>
+          <p id="profile-form-hint" class="hint"></p>
+          <button class="btn" type="submit">Enregistrer</button>
+        </form>
+      </dialog>
+      <dialog id="tag-settings-dialog" class="stock-dialog tag-settings-dialog"><form method="dialog" class="stack"><div class="section-heading"><div><p class="eyebrow">Reglages</p><h3>Favoris de tags</h3></div><button id="btn-close-tag-settings" class="btn btn-ghost" type="button">Fermer</button></div><p class="hint">Choisis les tags qui apparaissent en raccourci sur une ruche.</p><div id="tag-favorites-settings" class="tag-settings-list"></div></form></dialog>
+      <dialog id="tag-dialog" class="stock-dialog tag-dialog"><form id="ruche-tag-form" class="stack"><div class="section-heading"><div><p class="eyebrow">Tags de la ruche</p><h3>Ajouter ou retirer des tags</h3></div><button id="btn-close-tag-dialog" class="btn btn-ghost" type="button">Fermer</button></div><p class="category-label">Tags actuels</p><div id="tag-dialog-current" class="tag-list"><p class="hint">Aucun tag pose.</p></div><p class="category-label">Favoris de visite</p><div id="ruche-tag-favorites" class="tag-favorites"></div><div id="tag-dialog-catalog" class="tag-dialog-catalog"></div><p class="hint">Touche plusieurs tags pour les selectionner, puis Ajouter.</p><label>Autres tags (separes par des virgules)<input id="ruche-tag-input" maxlength="200" list="tag-suggestions" placeholder="a nourrir, essaimage"><datalist id="tag-suggestions"></datalist></label><p id="ruche-tag-hint" class="hint" role="status"></p><button id="btn-add-ruche-tags" class="btn" type="submit">Ajouter</button></form></dialog>
+      <dialog id="rucher-dialog" class="stock-dialog"><form id="rucher-edit-form" class="stack"><div class="section-heading"><div><p class="eyebrow">Rucher</p><h3>Modifier le rucher</h3></div><button id="btn-close-rucher" class="btn btn-ghost" type="button">Fermer</button></div><input id="edit-rucher-id" type="hidden"><label>Nom<input id="edit-rucher-name" required maxlength="150"></label><div class="form-grid"><label>Biotope<select id="edit-rucher-type"><option value="plaine">Plaine</option><option value="bocage">Bocage</option><option value="montagne">Montagne</option><option value="foret">Foret</option><option value="ville">Ville</option><option value="littoral">Littoral</option><option value="autre">Autre</option></select></label><label>Statut<select id="edit-rucher-status"><option value="actif">Actif</option><option value="inactif">Inactif</option></select></label><label>Peuplement<select id="edit-rucher-peuplement"><option value="peuple">Peuple</option><option value="vide">Vide</option></select></label></div><div class="form-grid"><label>Latitude<input id="edit-rucher-latitude" type="number" step="any" min="-90" max="90" inputmode="decimal"></label><label>Longitude<input id="edit-rucher-longitude" type="number" step="any" min="-180" max="180" inputmode="decimal"></label></div><p class="hint">Les ruches du rucher restent en place apres modification.</p><p id="edit-rucher-hint" class="hint"></p><div class="actions"><button class="btn" type="submit">Enregistrer</button><button id="btn-delete-rucher" class="btn btn-danger" type="button">Supprimer le rucher</button></div></form></dialog><dialog id="quick-create-dialog" class="stock-dialog wide-dialog"><form id="quick-create-form" class="stack" novalidate><div class="section-heading"><div><p class="eyebrow">Creation rapide</p><h3 id="quick-create-title">Creer un rucher et ses ruches</h3></div><button id="btn-close-quick-create" class="btn btn-ghost" type="button">Fermer</button></div>
+<div id="quick-rucher-fields" class="form-grid"><label>Nom du rucher<input id="quick-rucher-name" maxlength="150" placeholder="Rucher des Tilleuls"></label><label>Type de terrain<select id="quick-rucher-type"><option value="plaine">Plaine</option><option value="bocage">Bocage</option><option value="montagne">Montagne</option><option value="foret">Foret</option><option value="ville">Ville</option><option value="littoral">Littoral</option><option value="autre">Autre</option></select></label></div>
+<p id="quick-rucher-target" class="category-label" hidden></p>
+<label id="quick-template-wrap">Modele de ruche <span class="premium-chip">Premium</span><select id="quick-template"><option value="">Aucun modele</option></select></label>
+<div class="form-grid"><label>Type de ruche<select id="quick-type"></select></label></div>
+<div class="form-grid"><label>Nombre de ruches<input id="quick-count" type="number" min="1" max="200" value="10" inputmode="numeric"></label><label>Format<select id="quick-format"></select></label><label>Cadres par ruche<input id="quick-frames" type="number" min="0" max="100" inputmode="numeric"></label></div>
+<div class="form-grid"><label>Prefixe<input id="quick-prefix" maxlength="20" value="R"></label><label>Premier numero<input id="quick-start" type="number" min="0" value="1" inputmode="numeric"></label></div>
+<fieldset class="equipment-grid"><legend>Materiel de chaque ruche</legend><label><input id="quick-has-corps" type="checkbox" checked> Corps et couvre-cadre</label><label><input id="quick-has-toit" type="checkbox" checked> Toit</label><label><input id="quick-has-plancher" type="checkbox" checked> Plancher</label><label><input id="quick-has-grille" type="checkbox"> Grille a reine</label><label><input id="quick-has-nourrisseur" type="checkbox"> Nourrisseur</label><label><input id="quick-has-hausse" type="checkbox"> Hausse</label></fieldset>
+<p class="hint">Nouveau materiel : le stock de l'Atelier ne bouge pas. Les reines s'ajoutent ensuite dans chaque ruche.</p>
+<section class="stack"><p class="category-label" id="quick-preview-title">Apercu</p><p class="hint">Numerotation automatique : chaque identifiant et chaque format restent modifiables ici, puis dans la fiche de la ruche.</p><div class="preview-scroll"><table class="preview-table"><thead><tr><th>Identifiant</th><th>Type</th><th>Format</th></tr></thead><tbody id="quick-preview-body"></tbody></table></div></section>
+<p id="quick-create-hint" class="hint" role="status"></p>
+<div class="actions"><button id="btn-quick-submit" class="btn" type="submit">Creer les ruches</button><button id="btn-quick-save-template" class="btn btn-ghost" type="button">Enregistrer comme modele <span class="premium-chip">Premium</span></button></div></form></dialog>
+<dialog id="import-dialog" class="stock-dialog wide-dialog"><form id="import-form" class="stack" novalidate><div class="section-heading"><div><p class="eyebrow">Import <span class="premium-chip">Premium</span></p><h3>Importer un tableur</h3></div><button id="btn-close-import" class="btn btn-ghost" type="button">Fermer</button></div>
+<p class="hint">Fichier CSV ou Excel (.xlsx), une ligne par ruche : le rucher et l'identifiant sont obligatoires ; le type (production, essaim...), le format et le nombre de cadres sont facultatifs. Rien n'est cree tant qu'une ligne est en erreur.</p>
+<p><button id="btn-import-template" class="link-button" type="button">Telecharger un modele de fichier</button></p>
+<label>Fichier<input id="import-file" type="file" accept=".csv,.xlsx,.xls,text/csv"></label>
+<fieldset id="import-mapping" class="form-grid" hidden><legend>Colonnes du fichier</legend><label>Rucher<select id="import-map-rucher" data-field="rucher"></select></label><label>Identifiant<select id="import-map-identifiant" data-field="identifiant"></select></label><label>Type de ruche<select id="import-map-type_ruche" data-field="type_ruche"></select></label><label>Format<select id="import-map-format" data-field="format"></select></label><label>Nombre de cadres<select id="import-map-nombre_cadres" data-field="nombre_cadres"></select></label></fieldset>
+<section id="import-preview" class="stack" hidden><p id="import-summary" class="category-label"></p><div class="preview-scroll"><table class="preview-table"><thead><tr><th>Ligne</th><th>Rucher</th><th>Identifiant</th><th>Type</th><th>Format</th><th>Cadres</th><th>Statut</th></tr></thead><tbody id="import-preview-body"></tbody></table></div></section>
+<p id="import-hint" class="hint" role="status"></p>
+<div class="actions"><button id="btn-import-submit" class="btn" type="submit" disabled>Importer</button></div></form></dialog>
+<dialog id="help-dialog" class="stock-dialog"><div class="stack"><div class="section-heading"><div><p class="eyebrow">Aide</p><h3>Problemes frequents</h3></div><button id="btn-close-help" class="btn btn-ghost" type="button">Fermer</button></div>
+        <section class="help-item"><h4>1. Mes actions echouent ou je suis renvoye a la connexion</h4><p>La session a expire. Reconnecte-toi : les visites saisies hors ligne restent en attente sur le telephone et partent a la reconnexion.</p></section>
+        <section class="help-item"><h4>2. Une visite faite hors ligne n'apparait pas</h4><p>Ouvre Nouvelle visite : la ligne d'etat indique combien de visites attendent. Elles se synchronisent seules au retour du reseau. Si la visite a ete modifiee ailleurs entre-temps, l'application te demande quelle version garder.</p></section>
+        <section class="help-item"><h4>3. Le stock de l'Atelier ne correspond pas</h4><p>Le stock additionne le materiel range (saisi) et le materiel en service (calcule depuis les ruches). Verifie le format de chaque ruche (Dadant, Ruchette...) : sans format, son materiel est classe en non renseigne.</p></section>
+        <p>Un autre souci ou une idee ? <a href="./feedback.html">Envoyer un retour</a>.</p></div></dialog>
+<dialog id="transvasement-dialog" class="stock-dialog"><form id="transvasement-form" class="stack"><div class="section-heading"><div><p class="eyebrow">Changer de contenant</p><h3 id="transvasement-title">Transvaser</h3></div><button id="btn-close-transvasement" class="btn btn-ghost" type="button">Fermer</button></div><p id="transvasement-current" class="hint"></p><div class="form-grid"><label>Nouveau format<select id="transvasement-format"><option value="dadant">Dadant</option><option value="langstroth">Langstroth</option><option value="warre">Warre</option><option value="ruchette">Ruchette</option><option value="nucleus">Nucleus</option><option value="autre">Autre</option></select></label><label>Provenance du contenant<select id="transvasement-provenance"><option value="stock">Stock atelier</option><option value="achat">Nouveau materiel</option><option value="ruche_atelier">Ruche preparee a l'atelier</option></select></label></div><label id="transvasement-source-wrap" hidden>Ruche preparee<select id="transvasement-source"></select></label><fieldset id="transvasement-elements" class="equipment-grid"><legend>Elements du nouveau contenant</legend><label><input type="checkbox" value="plancher" checked> Plancher</label><label><input type="checkbox" value="corps" checked> Corps</label><label><input type="checkbox" value="toit" checked> Toit</label><label><input type="checkbox" value="partition"> Partition</label><label><input type="checkbox" value="grille"> Grille a reine</label><label><input type="checkbox" value="nourrisseur"> Nourrisseur</label></fieldset><div class="form-grid"><label>Cadres transferes<input id="transvasement-cadres-transferes" type="number" min="0" max="100" required></label><label>Cadres ajoutes<input id="transvasement-cadres-ajoutes" type="number" min="0" max="100" value="0"></label><label>Annee de cire des cadres ajoutes<input id="transvasement-annee-cire" type="number" min="1900" max="2100"></label></div><label>Nouvel identifiant (facultatif)<input id="transvasement-identifiant" maxlength="100" placeholder="Garder l'identifiant actuel"></label><p class="hint">La colonie garde sa reine, ses visites et ses recoltes. L'ancien contenant et les cadres non transferes reviennent dans le stock de l'Atelier.</p><p id="transvasement-hint" class="hint" role="status"></p><button class="btn" type="submit">Valider le transvasement</button></form></dialog>
+      <dialog id="rucher-delete-dialog" class="stock-dialog"><div class="stack"><div class="section-heading"><div><p class="eyebrow">Suppression</p><h3 id="rucher-delete-title">Supprimer le rucher</h3></div><button id="btn-close-rucher-delete" class="btn btn-ghost" type="button">Fermer</button></div><section id="rucher-delete-move-step" class="stack" hidden><p id="rucher-delete-move-text" class="hint"></p><label>Transhumer les ruches vers<select id="rucher-delete-target"></select></label><button id="btn-rucher-delete-move" class="btn" type="button">Transhumer les ruches</button></section><section id="rucher-delete-confirm-step" class="stack" hidden><p id="rucher-delete-confirm-text"></p><button id="btn-rucher-delete-confirm" class="btn btn-danger" type="button">Supprimer definitivement</button></section><p id="rucher-delete-hint" class="hint" role="status"></p></div></dialog>
+      <dialog id="rucher-create-dialog" class="stock-dialog"><form id="rucher-create-form" class="stack"><div class="section-heading"><div><p class="eyebrow">Cheptel</p><h3>Ajouter un rucher</h3></div><button id="btn-close-create-rucher" class="btn btn-ghost" type="button">Fermer</button></div><label>Nom du rucher<input id="create-rucher-name" required maxlength="150" placeholder="Rucher Prairie"></label><label>Type de terrain<select id="create-rucher-type"><option value="plaine">Plaine</option><option value="bocage">Bocage</option><option value="montagne">Montagne</option><option value="foret">Foret</option><option value="ville">Ville</option><option value="littoral">Littoral</option><option value="autre">Autre</option></select></label><p id="create-rucher-hint" class="hint"></p><button class="btn" type="submit">Creer le rucher</button></form></dialog>
+      <dialog id="harvest-dialog" class="stock-dialog"><form id="harvest-form" class="stack"><div class="section-heading"><div><p class="eyebrow">Production</p><h3 id="harvest-dialog-title">Nouvelle recolte</h3></div><button id="btn-close-harvest" class="btn btn-ghost" type="button">Fermer</button></div><input id="harvest-id" type="hidden"><div class="form-grid"><label>Rucher<select id="harvest-rucher"></select></label><label>Ruche<select id="harvest-ruche"></select></label></div><p id="harvest-context" class="hint"></p><label>Poids de miel (kg)<input id="harvest-weight" type="number" min="0" step="0.01" required></label><p id="harvest-hint" class="hint"></p><div class="actions"><button class="btn" type="submit">Enregistrer la recolte</button><button id="btn-delete-harvest" class="btn btn-danger" type="button" hidden>Supprimer la recolte</button></div></form></dialog>
+      <dialog id="bulk-move-dialog" class="stock-dialog"><form id="bulk-move-form" class="stack"><div class="section-heading"><div><p class="eyebrow">Deplacement</p><h3>Deplacer des ruches</h3></div><button id="btn-close-bulk-move" class="btn btn-ghost" type="button">Fermer</button></div><p id="bulk-move-summary" class="hint"></p><label>Destination<select id="bulk-move-target"></select></label><p id="bulk-move-hint" class="hint"></p><button class="btn" type="submit">Deplacer</button></form></dialog>
+      <article data-panel="visites">
+        <div class="section-heading"><h3>Visites</h3><div class="section-actions"><button id="btn-show-ia-review" class="btn btn-secondary" type="button">Revue IA</button><button id="btn-new-visit" class="btn" type="button">Nouvelle visite</button><button id="btn-new-harvest" class="btn btn-secondary" type="button">Nouvelle recolte</button></div></div>
+        <section class="visits-filter-panel">
+        <div class="scope-picker">
+          <label>Rucher<select id="visite-scope-rucher" autocomplete="off" class="native-scope-select"><option value="">Choisir un rucher</option></select><details id="visite-scope-rucher-menu" class="scope-menu"><summary>Choisir un rucher</summary><div class="scope-menu-options"></div></details></label>
+          <label>Ruche<select id="visite-scope-ruche" autocomplete="off" class="native-scope-select"><option value="">Choisir une ruche</option></select><details id="visite-scope-ruche-menu" class="scope-menu"><summary>Choisir une ruche</summary><div class="scope-menu-options"></div></details></label>
+        </div>
+        <p class="hint">Choisis le contexte de saisie ici. L'historique filtre s'affiche directement ci-dessous.</p>
+        </section>
+        <section id="visit-history-panel" class="stack visit-history-panel"><div class="section-heading"><div><p class="eyebrow">Journal terrain</p><h3>Historique</h3></div></div>
+        <div class="visit-filters">
+          <input id="visites-search" autocomplete="off" type="search" placeholder="Rechercher une ruche">
+          <select id="visites-type-filter" autocomplete="off" class="native-scope-select"><option value="">Visites et recoltes</option><option value="visite">Visites</option><option value="recolte">Recoltes</option></select><details id="visites-type-menu" class="scope-menu compact-filter-menu"><summary>Visites et recoltes</summary><div class="scope-menu-options"></div></details>
+          <select id="visites-status-filter" autocomplete="off" class="native-scope-select"><option value="">Tous les statuts</option><option value="valide">Completes</option><option value="brouillon">Brouillons</option></select><details id="visites-status-menu" class="scope-menu compact-filter-menu"><summary>Tous les statuts</summary><div class="scope-menu-options"></div></details>
+          <select id="visites-source-filter" autocomplete="off" class="native-scope-select"><option value="">Toutes les sources</option><option value="manuelle">Manuelles</option><option value="ia_vocale">IA</option></select><details id="visites-source-menu" class="scope-menu compact-filter-menu"><summary>Toutes les sources</summary><div class="scope-menu-options"></div></details>
+        </div>
+        <div class="visit-date-filters"><label for="visites-start-date">Du</label><input id="visites-start-date" autocomplete="off" type="date"><label for="visites-end-date">au</label><input id="visites-end-date" autocomplete="off" type="date"></div>
+        <p id="visites-history-hint" class="hint">Les visites chargees apparaitront ici.</p>
+        <ul id="visites-list" class="list"></ul>
+        </section>
+        <dialog id="ia-wip-dialog" class="stock-dialog"><div class="stack"><div class="section-heading"><div><p class="eyebrow">Revue IA</p><h3>Service en cours de developpement</h3></div><button id="btn-close-ia-wip" class="btn btn-ghost" type="button">Fermer</button></div><p class="hint">La transcription vocale reelle n'est pas encore branchee : cette section reste utile pour relire d'eventuels brouillons deja crees, mais aucun nouveau brouillon vocal n'est genere pour l'instant.</p></div></dialog>
+        <dialog id="visit-create-dialog" class="stock-dialog visit-create-dialog">
+        <form id="visite-form" class="stack">
+          <div class="section-heading"><div><p class="eyebrow">Journal terrain</p><h3>Nouvelle visite</h3></div><button id="btn-close-create-visit" class="btn btn-ghost" type="button">Fermer</button></div>
+          <p id="sync-status" class="sync-status">Connexion en ligne.</p>
+          <div class="form-grid"><label>Rucher<select id="visit-create-rucher"></select></label><label>Ruche<select id="visit-create-ruche"></select></label></div>
+          <p id="visite-scope-reminder" class="hint"></p>
+          <button id="btn-visit-tags" class="btn btn-secondary" type="button">Modifier les tags</button><button id="btn-visit-transvasement" class="btn btn-secondary" type="button">Transvaser</button><p id="visit-transvasement-summary" class="hint" hidden></p><div id="visit-selected-tags" class="tag-list"><p class="hint">Tags actuels non charges.</p></div>
+          <div class="form-grid">
+            <label>Reine vue<select id="visite-reine-vue"><option value="">Non renseigne</option><option value="true">Oui</option><option value="false">Non</option></select></label>
+            <label>Type de ruche<select id="visite-type-ruche"><option value="">Non renseigne</option></select></label>
+            <label>Ponte presente<select id="visite-ponte"><option value="">Non renseigne</option><option value="true">Oui</option><option value="false">Non</option></select></label>
+            <label>Etat couvain<select id="visite-couvain"><option value="">Non renseigne</option><option value="faible">Faible</option><option value="normal">Normal</option><option value="excellent">Excellent</option></select></label>
+            <label>Reserves<select id="visite-reserves"><option value="">Non renseigne</option><option value="critique">Critique</option><option value="correct">Correct</option><option value="abondant">Abondant</option></select></label>
+            <label>Note ruche<input id="visite-note" type="number" min="1" max="5" placeholder="1 a 5"></label>
+            <label>Cadres de couvain<input id="visite-cadres-couvain" type="number" min="0"></label>
+            <label>Cadres totaux<input id="visite-cadres-total" type="number" min="0"></label>
+          </div>
+          <fieldset class="frame-movement-grid"><legend>Age des cadres</legend><label>Action cadre<select id="visite-cadres-action"></select></label><label>Quantite<input id="visite-cadres-quantite" type="number" min="1" value="1"></label><label>Annee de cire<input id="visite-cadres-annee" type="number" min="1900" max="2100"></label></fieldset>
+          <fieldset class="equipment-grid"><legend>Materiel observe</legend><label><input id="visite-corps" type="checkbox"> Corps</label><label class="equipment-with-count"><input id="visite-hausse" type="checkbox"> Hausse<input id="visite-hausse-quantite" type="number" min="1" placeholder="Nb" disabled></label><label><input id="visite-partition" type="checkbox"> Partition</label><label><input id="visite-grille" type="checkbox"> Grille a reine</label><label><input id="visite-nourrisseur" type="checkbox"> Nourrisseur</label><label><input id="visite-toit" type="checkbox"> Toit</label><label><input id="visite-plancher" type="checkbox"> Plancher</label></fieldset>
+          <div class="actions">
+            <button class="btn" type="submit">Enregistrer la visite</button>
+          </div>
+          <div id="visit-tag-suggestions" class="tag-suggestions" hidden></div>
+          <p id="visite-form-hint" class="hint"></p>
+        </form>
+        </dialog>
+        <section id="sync-conflict-card" class="sync-conflict" hidden>
+          <h3>Conflits de synchronisation</h3>
+          <p id="sync-conflict-summary" class="hint"></p>
+          <div id="sync-conflict-details" class="detail-grid"></div>
+          <div class="actions">
+            <button id="sync-keep-local" class="btn" type="button">Garder ma saisie</button>
+            <button id="sync-keep-server" class="btn btn-ghost" type="button">Garder le serveur</button>
+            <button id="sync-merge" class="btn btn-secondary" type="button">Fusionner manuellement</button>
+          </div>
+        </section>
+      </article>
+      <article id="ia-review-card" data-panel="visites">
+        <h3>Revue IA</h3>
+        <p id="ia-review-summary" class="hint">Brouillons IA non charges.</p>
+        <ul id="ia-drafts-list" class="list"><li>Aucun brouillon charge.</li></ul>
+        <dialog id="ia-review-dialog" class="stock-dialog"><form id="ia-review-form" class="stack">
+          <div class="section-heading"><div><p class="eyebrow">Revue IA</p><h3>Modifier le brouillon selectionne</h3></div><button id="btn-close-ia-review" class="btn btn-ghost" type="button">Fermer</button></div>
+          <input id="ia-draft-id" type="hidden">
+          <div class="form-grid">
+            <label>Reine vue<select id="ia-reine-vue"><option value="">Non renseigne</option><option value="true">Oui</option><option value="false">Non</option></select></label>
+            <label>Etat couvain<select id="ia-couvain"><option value="">Non renseigne</option><option value="faible">Faible</option><option value="normal">Normal</option><option value="excellent">Excellent</option></select></label>
+            <label>Reserves<select id="ia-reserves"><option value="">Non renseigne</option><option value="critique">Critique</option><option value="correct">Correct</option><option value="abondant">Abondant</option></select></label>
+            <label>Note ruche<input id="ia-note" type="number" min="1" max="5"></label>
+            <label>Cadres couvain<input id="ia-cadres-couvain" type="number" min="0"></label>
+            <label>Cadres totaux<input id="ia-cadres-total" type="number" min="0"></label>
+          </div>
+          <div class="actions">
+            <button class="btn btn-secondary" type="submit">Enregistrer le brouillon</button>
+            <button id="ia-validate" class="btn" type="button">Valider</button>
+            <button id="ia-reject" class="btn btn-ghost" type="button">Rejeter</button>
+          </div>
+          <p id="ia-review-hint" class="hint"></p>
+        </form></dialog>
+      </article>
+      <article data-panel="stats" class="stats-workspace">
+        <div class="section-heading stats-heading"><div><p class="eyebrow">Analyse du cheptel</p><h3>Statistiques</h3></div><span id="stats-year-label" class="status-chip">Saison en cours</span></div>
+        <div class="stats-toolbar">
+          <label class="stats-search-control">Recherche<input id="stats-search" type="search" autocomplete="off" list="stats-search-options" placeholder="Rechercher une ruche ..."><datalist id="stats-search-options"></datalist></label>
+          <div class="scope-picker">
+            <label>Rucher<select id="stats-scope-rucher" autocomplete="off" class="native-scope-select"><option value="">Tous les ruchers</option></select><details id="stats-scope-rucher-menu" class="scope-menu"><summary>Tous les ruchers</summary><div class="scope-menu-options"></div></details></label>
+            <label>Ruche<select id="stats-scope-ruche" autocomplete="off" class="native-scope-select"><option value="">Toutes les ruches</option></select><details id="stats-scope-ruche-menu" class="scope-menu"><summary>Toutes les ruches</summary><div class="scope-menu-options"></div></details></label>
+          </div>
+          <label class="period-control">Fenetre<select id="period-window" autocomplete="off"><option value="today">Aujourd hui</option><option value="season" selected>Saison en cours</option><option value="last-season">Saison derniere</option><option value="queen">Depuis reine en place</option><option value="180">6 mois</option><option value="90">3 mois</option><option value="30">1 mois</option></select></label>
+          <div class="date-filters"><label for="synth-start-date">Du</label><input id="synth-start-date" autocomplete="off" type="date"><label for="synth-end-date">au</label><input id="synth-end-date" autocomplete="off" type="date"></div>
+        </div>
+        <div class="dashboard-context stats-context"><div><p class="eyebrow">Portee</p><p id="dashboard-context-label" class="context-value">Tous les ruchers</p></div></div>
+        <p class="hint stats-reading" id="synthese-lecture">Charge une synthese pour voir les indicateurs terrain.</p>
+        <div class="stats-ledger" aria-label="Synthese statistique">
+          <div class="stats-metric"><span>Nombre de visites</span><strong id="synth-total-visites-ruche">-</strong></div>
+          <div class="stats-metric"><span>Reine vue</span><strong id="synth-reine-vue">-</strong></div>
+          <div class="stats-metric"><span>Note moy.</span><strong id="trend-note">-</strong></div>
+          <div class="stats-metric"><span>Cadres moy.</span><strong id="trend-frames">-</strong></div>
+          <div class="stats-metric"><span>Couvain</span><strong id="trend-brood-share">-</strong></div>
+          <span class="visually-hidden" id="stats-visits">-</span>
+          <div class="stats-metric"><span>Nombre recoltes</span><strong id="stats-harvests">-</strong></div>
+          <div class="stats-metric"><span>Miel recolte</span><strong id="stats-honey">-</strong></div>
+          <div class="stats-metric"><span>Mortalite <button type="button" class="info-tip" aria-label="Explication" data-tip="Part des ruches de la portee dont le statut indique une colonie morte.">i</button></span><strong id="stats-mortality">-</strong></div>
+          <div class="stats-metric"><span>Age de la reine</span><strong id="stats-queen-age">-</strong></div>
+          <div class="stats-metric"><span>Age moy. cadre <button type="button" class="info-tip" aria-label="Explication" data-tip="Moyenne ponderee de l'age de la cire, calculee depuis l'annee saisie lors des mouvements de cadres. A renseigner tant qu'aucune annee n'est connue.">i</button></span><strong id="stats-frame-age">-</strong></div>
+          <div class="stats-metric"><span>Cadres anciens</span><strong id="stats-old-frames">-</strong></div>
+        </div>
+        <div class="stats-analysis-tables" data-stats-scope="global rucher">
+          <section>
+            <h4>Suivi</h4>
+            <div class="metric-row"><span>Ruches suivies</span><strong id="synth-total-ruches">-</strong></div>
+            <div class="metric-row"><span>Reines agees <button type="button" class="info-tip" aria-label="Explication" data-tip="Reines actives de 2 ans ou plus.">i</button></span><strong id="stats-old-queens">-</strong></div>
+            <div class="metric-row"><span>Nouvelles colonies possibles <button type="button" class="info-tip" aria-label="Explication" data-tip="Ruches completes montables avec le stock de l'atelier (corps + plancher + toit), format par format.">i</button></span><strong id="stats-new-colonies">-</strong></div>
+            <span class="visually-hidden" id="synth-total-visites-rucher">-</span>
+            <span class="visually-hidden" id="synth-part-ia">-</span>
+          </section>
+          <section id="stats-distribution-block" data-stats-scope="global rucher">
+            <h4>Repartition</h4>
+            <p class="stats-subtitle">Par type de ruche</p>
+            <div id="stats-type-distribution" class="bar-list"><p class="hint">Types non charges.</p></div>
+            <div id="stats-rucher-distribution-wrap" data-stats-scope="global"><p class="stats-subtitle">Par rucher</p>
+            <div id="stats-rucher-distribution" class="bar-list"><p class="hint">Ruchers non charges.</p></div></div>
+            <p id="trend-comparison" class="hint">Analyse les tendances pour comparer les periodes.</p>
+            <p id="trend-scope" class="hint">Portee: tous les ruchers.</p>
+            <p class="visually-hidden" id="trend-queen">-</p>
+          </section>
+        </div>
+        <section id="stats-rucher-sheet" class="stats-sheet" data-stats-scope="rucher" hidden></section>
+        <section id="stats-hive-sheet" class="stats-sheet" data-stats-scope="ruche" hidden></section>
+        <div class="stats-breakdowns" data-stats-scope="global"><section><h4>Miel par rucher</h4><div id="stats-honey-by-rucher" class="bar-list"><p class="hint">Non charge.</p></div></section><section><h4>Miel par ruche</h4><div id="stats-honey-by-ruche" class="bar-list"><p class="hint">Non charge.</p></div></section></div>
+        <section class="stats-uncovered" data-stats-scope="global rucher"><h4>Ruches sans visite recente</h4><ul id="uncovered-hives-list" class="list"><li>Aucune analyse chargee.</li></ul></section>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <small id="status">Pret.</small>
+    <nav class="footer-links" aria-label="Informations legales">
+      <a href="./legal.html">Mentions legales</a>
+      <a href="./privacy.html">Confidentialite</a>
+      <a href="./terms.html">Conditions beta</a>
+      <a href="./feedback.html">Envoyer un retour</a>
+    </nav>
+  </footer>
+
+  <script src="./app.js?v=1.36.1" type="module"></script>
+</body>
+</html>
