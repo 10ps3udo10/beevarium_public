@@ -1,0 +1,4 @@
+# Vulnerabilites acceptees par scripts/linux/security_audit.sh (pip-audit et Trivy).
+# Un identifiant par ligne (CVE-..., GHSA-..., PYSEC-...), suivi d'un commentaire :
+# raison, date et date de reexamen. Exemple :
+# CVE-2026-00000  # non exploitable ici (fonction non utilisee), 2026-10-21, revoir 2026-11-21

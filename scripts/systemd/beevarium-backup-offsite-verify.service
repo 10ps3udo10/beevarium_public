@@ -1,0 +1,7 @@
+[Unit]
+Description=Beevarium - verification de restauration depuis le stockage distant
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/app
+ExecStart=/bin/bash scripts/linux/backup_offsite_verify.sh .env.target

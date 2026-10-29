@@ -1,0 +1,39 @@
+---
+- name: Dossier des cles apt
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: "0755"
+
+- name: Cle du depot Caddy
+  ansible.builtin.get_url:
+    url: "{{ caddy_apt_key_url }}"
+    dest: /etc/apt/keyrings/caddy.asc
+    mode: "0644"
+
+- name: Depot apt Caddy
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/caddy.asc] {{ caddy_apt_repo_url }} any-version main"
+    filename: caddy
+    state: present
+
+- name: Installer Caddy
+  ansible.builtin.apt:
+    name: caddy
+    state: present
+
+- name: Caddyfile versionne (action A2)
+  ansible.builtin.template:
+    src: Caddyfile.j2
+    dest: /etc/caddy/Caddyfile
+    mode: "0644"
+    owner: root
+    group: root
+    validate: caddy validate --config %s --adapter caddyfile
+  notify: Recharger Caddy
+
+- name: Caddy actif au demarrage
+  ansible.builtin.service:
+    name: caddy
+    state: started
+    enabled: true

@@ -1,0 +1,21 @@
+---
+- name: Installer les paquets de base
+  ansible.builtin.apt:
+    name: "{{ base_packages }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Activer les mises a jour automatiques
+  ansible.builtin.copy:
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    content: |
+      APT::Periodic::Update-Package-Lists "1";
+      APT::Periodic::Unattended-Upgrade "1";
+    mode: "0644"
+    owner: root
+    group: root
+
+- name: Fuseau horaire UTC
+  community.general.timezone:
+    name: "{{ base_timezone }}"

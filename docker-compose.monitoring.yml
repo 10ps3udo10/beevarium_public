@@ -1,0 +1,83 @@
+# Supervision du VPS. Stack independante de l'application: elle doit continuer
+# a fonctionner meme si la stack applicative est arretee.
+#
+# Aucun service n'est publie sur l'exterieur: tout est lie a 127.0.0.1 et
+# s'atteint par tunnel SSH. Voir docs/06-exploitation.md.
+
+services:
+  # Expose une vue restreinte de l'API Docker a Netdata.
+  # Monter directement /var/run/docker.sock equivaudrait a donner les droits root.
+  docker_socket_proxy:
+    image: tecnativa/docker-socket-proxy:0.1.2
+    container_name: beevarium_docker_proxy
+    environment:
+      CONTAINERS: 1
+      IMAGES: 1
+      INFO: 1
+      PING: 1
+      VERSION: 1
+      POST: 0
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  netdata:
+    image: netdata/netdata:stable
+    container_name: beevarium_netdata
+    hostname: beevarium-vps
+    pid: host
+    depends_on:
+      - docker_socket_proxy
+    environment:
+      DOCKER_HOST: docker_socket_proxy:2375
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - apparmor:unconfined
+    ports:
+      - "127.0.0.1:19999:19999"
+    volumes:
+      - netdata_config:/etc/netdata
+      - netdata_lib:/var/lib/netdata
+      - netdata_cache:/var/cache/netdata
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  uptime_kuma:
+    image: louislam/uptime-kuma:1
+    container_name: beevarium_uptime_kuma
+    ports:
+      - "127.0.0.1:3001:3001"
+    volumes:
+      - uptime_kuma_data:/app/data
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  netdata_config:
+    name: beevarium_netdata_config
+  netdata_lib:
+    name: beevarium_netdata_lib
+  netdata_cache:
+    name: beevarium_netdata_cache
+  uptime_kuma_data:
+    name: beevarium_uptime_kuma_data

@@ -1,0 +1,38 @@
+---
+- name: Dossier des cles apt
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: "0755"
+
+- name: Cle du depot Docker
+  ansible.builtin.get_url:
+    url: "{{ docker_apt_key_url }}"
+    dest: /etc/apt/keyrings/docker.asc
+    mode: "0644"
+
+- name: Depot apt Docker (Debian)
+  ansible.builtin.apt_repository:
+    repo: >-
+      deb [arch={{ docker_arch_map[ansible_architecture] | default('amd64') }}
+      signed-by=/etc/apt/keyrings/docker.asc]
+      https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable
+    filename: docker
+    state: present
+
+- name: Installer Docker Engine et le plugin compose
+  ansible.builtin.apt:
+    name: "{{ docker_packages }}"
+    state: present
+
+- name: Ajouter l'utilisateur au groupe docker
+  ansible.builtin.user:
+    name: "{{ docker_user }}"
+    groups: docker
+    append: true
+
+- name: Docker actif au demarrage
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: true

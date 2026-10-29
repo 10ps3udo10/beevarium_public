@@ -1,0 +1,67 @@
+---
+- name: Dossier de la page d'accueil
+  ansible.builtin.file:
+    path: "{{ beevarium_user_site_root }}"
+    state: directory
+    owner: "{{ beevarium_user_name }}"
+    group: "{{ beevarium_user_name }}"
+    mode: "0755"
+
+- name: Linger (timers utilisateur hors session)
+  ansible.builtin.command: loginctl enable-linger {{ beevarium_user_name }}
+  args:
+    creates: "/var/lib/systemd/linger/{{ beevarium_user_name }}"
+
+# L'application n'est ni clonee ni deployee ici (deploy.sh). Les unites ne
+# sont installees que si le clone existe deja.
+- name: Chercher les unites systemd dans le clone
+  ansible.builtin.find:
+    paths: "{{ beevarium_user_clone_dir }}/scripts/systemd"
+    patterns: "beevarium-*.service,beevarium-*.timer"
+  register: beevarium_user_units
+
+- name: Prevenir si le clone est absent
+  ansible.builtin.debug:
+    msg: "Clone {{ beevarium_user_clone_dir }} absent : unites systemd non installees. Cloner puis relancer --tags user."
+  when: beevarium_user_units.matched == 0
+
+- name: Lire l'uid de l'utilisateur
+  ansible.builtin.getent:
+    database: passwd
+    key: "{{ beevarium_user_name }}"
+
+- name: Dossier des unites utilisateur
+  ansible.builtin.file:
+    path: "/home/{{ beevarium_user_name }}/.config/systemd/user"
+    state: directory
+    owner: "{{ beevarium_user_name }}"
+    group: "{{ beevarium_user_name }}"
+    mode: "0755"
+  when: beevarium_user_units.matched > 0
+
+- name: Copier les unites systemd utilisateur
+  ansible.builtin.copy:
+    src: "{{ item.path }}"
+    dest: "/home/{{ beevarium_user_name }}/.config/systemd/user/{{ item.path | basename }}"
+    remote_src: true
+    owner: "{{ beevarium_user_name }}"
+    group: "{{ beevarium_user_name }}"
+    mode: "0644"
+  loop: "{{ beevarium_user_units.files }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
+  when: beevarium_user_units.matched > 0
+
+- name: Activer les timers utilisateur
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    scope: user
+    enabled: true
+    state: started
+    daemon_reload: true
+  become: true
+  become_user: "{{ beevarium_user_name }}"
+  environment:
+    XDG_RUNTIME_DIR: "/run/user/{{ getent_passwd[beevarium_user_name][1] }}"
+  loop: "{{ beevarium_user_timers }}"
+  when: beevarium_user_units.matched > 0

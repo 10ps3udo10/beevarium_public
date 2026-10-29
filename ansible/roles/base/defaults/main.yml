@@ -1,0 +1,3 @@
+---
+base_packages: [unattended-upgrades, fail2ban, python3-systemd, ufw, lynis, rsync, git, curl, ca-certificates, gnupg]
+base_timezone: Etc/UTC

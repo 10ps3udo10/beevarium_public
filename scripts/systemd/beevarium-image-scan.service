@@ -1,0 +1,7 @@
+[Unit]
+Description=Beevarium - scan quotidien des images Docker (Trivy) et alerte e-mail
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/app
+ExecStart=/bin/bash scripts/linux/scan_images.sh .env.target

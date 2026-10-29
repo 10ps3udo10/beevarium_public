@@ -1,0 +1,7 @@
+[Unit]
+Description=Beevarium - controles de supervision et alertes e-mail
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/app
+ExecStart=/usr/bin/python3 scripts/watchdog.py .env.target

@@ -1,0 +1,95 @@
+# Integration continue (R2, R3) : gate complet sur une stack Docker jetable,
+# recherche de secrets dans l'historique et analyse statique du backend.
+# Ne cible jamais la beta ni app-dev : tout tourne sur le runner GitHub.
+# Le depot public en garde une copie visible, mais les jobs n'y tournent pas
+# (condition sur le depot) ; les changements de documentation seule non plus.
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["**.md", "docs/**", "site/**"]
+  pull_request:
+    paths-ignore: ["**.md", "docs/**", "site/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    name: Gate complet
+    if: github.repository == '10ps3udo10/beevarium'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/requirements-dev.txt
+
+      - name: Dependances de test
+        run: pip install -q -r backend/requirements-dev.txt
+
+      - name: Stack locale
+        run: |
+          # Secret JWT propre au run, jamais stocke.
+          grep -v '^JWT_SECRET_KEY' .env.example > .env
+          echo "JWT_SECRET_KEY=$(openssl rand -hex 32)" >> .env
+          docker compose --env-file .env up -d --build
+          bash scripts/linux/wait_for_api.sh --api-base-url http://localhost:8000
+
+      - name: Gate complet
+        run: bash scripts/linux/gate_fast.sh --full-integration --api-base-url http://localhost:8000
+
+      - name: Logs API en cas d'echec
+        if: failure()
+        run: docker compose --env-file .env logs --no-color --tail 300 api
+
+      - name: Artefacts Playwright
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-test-results
+          path: test-results/
+          retention-days: 7
+          if-no-files-found: ignore
+
+  secrets:
+    name: Secrets (gitleaks)
+    if: github.repository == '10ps3udo10/beevarium'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Historique complet
+        run: |
+          # Depot monte avec un autre proprietaire que l'utilisateur du conteneur.
+          docker run --rm -v "$PWD:/repo:ro" \
+            -e GIT_CONFIG_COUNT=1 -e GIT_CONFIG_KEY_0=safe.directory -e GIT_CONFIG_VALUE_0='*' \
+            zricethezav/gitleaks:v8.24.3 \
+            git /repo --no-banner --redact --gitleaks-ignore-path /repo/.gitleaksignore
+
+  sast:
+    name: Analyse statique (Bandit)
+    if: github.repository == '10ps3udo10/beevarium'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Bandit, severite moyenne et plus
+        run: |
+          pip install -q bandit==1.8.6
+          bandit -q -r backend/app -ll

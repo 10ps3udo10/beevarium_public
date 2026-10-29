@@ -1,0 +1,13 @@
+{
+  "defaultProfile": "local",
+  "profiles": {
+    "local": {
+      "label": "Local Docker",
+      "apiBaseUrl": "same-origin"
+    },
+    "staging": {
+      "label": "Staging",
+      "apiBaseUrl": "https://staging-api.example.com"
+    }
+  }
+}

@@ -1,0 +1,5 @@
+---
+docker_user: beevarium
+docker_apt_key_url: https://download.docker.com/linux/debian/gpg
+docker_packages: [docker-ce, docker-ce-cli, containerd.io, docker-buildx-plugin, docker-compose-plugin]
+docker_arch_map: { x86_64: amd64, aarch64: arm64 }

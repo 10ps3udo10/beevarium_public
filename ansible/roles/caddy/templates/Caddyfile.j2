@@ -1,0 +1,25 @@
+# Gere par Ansible (ansible/roles/caddy). Ne pas modifier a la main.
+
+(entetes_securite) {
+	header {
+		-Server
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "no-referrer"
+		X-Frame-Options "DENY"
+	}
+}
+
+{{ caddy_beta_domain }} {
+	import entetes_securite
+	encode gzip
+	reverse_proxy {{ caddy_beta_upstream }}
+}
+
+{{ caddy_site_domains | join(', ') }} {
+	import entetes_securite
+	header Content-Security-Policy "default-src 'none'; style-src 'unsafe-inline'; font-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+	root * {{ caddy_site_root }}
+	encode gzip
+	file_server
+}

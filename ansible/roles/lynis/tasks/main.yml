@@ -1,0 +1,13 @@
+---
+# Optionnel : --tags audit (action A4).
+- name: Lancer l'audit Lynis
+  ansible.builtin.command: lynis audit system --quick --no-colors
+  register: lynis_run
+  changed_when: false
+  failed_when: lynis_run.rc not in [0, 1, 2]
+
+- name: Rapatrier le rapport
+  ansible.builtin.fetch:
+    src: /var/log/lynis-report.dat
+    dest: "{{ lynis_report_dir }}/{{ inventory_hostname }}-lynis-report.dat"
+    flat: true

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Beevarium - Envoyer un retour</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="legal-page feedback-page">
+    <a href="./index.html">Retour a Beevarium</a>
+    <h1>Votre retour</h1>
+    <p>Decrivez ce qui vous a aide, bloque ou manque. N'indiquez ni mot de passe ni information sensible.</p>
+    <section id="feedback-login" class="card feedback-login" hidden>
+      <h2>Connexion requise</h2>
+      <p class="hint">Connectez-vous ici ou depuis l'application pour envoyer votre retour.</p>
+      <label>Email<input id="feedback-login-email" type="email" autocomplete="username" required></label>
+      <label>Mot de passe<input id="feedback-login-password" type="password" autocomplete="current-password" required></label>
+      <div class="actions"><button id="feedback-login-button" class="btn" type="button">Se connecter</button></div>
+      <p id="feedback-login-status" class="hint" role="status"></p>
+    </section>
+    <form id="feedback-form" class="card feedback-form">
+      <label>Type de retour
+        <select id="feedback-category" required>
+          <option value="bug">Probleme rencontre</option>
+          <option value="idee">Idee d'amelioration</option>
+          <option value="question">Question</option>
+          <option value="autre">Autre</option>
+        </select>
+      </label>
+      <label>Votre message
+        <textarea id="feedback-message" minlength="10" maxlength="4000" rows="7" required></textarea>
+      </label>
+      <label>Contexte facultatif
+        <input id="feedback-context" maxlength="255" placeholder="Ex. apres l'enregistrement d'une visite">
+      </label>
+      <p id="feedback-status" class="hint" role="status"></p>
+      <div class="actions"><button class="btn" type="submit">Envoyer</button></div>
+    </form>
+  </main>
+  <script type="module" src="./feedback.js"></script>
+</body>
+</html>

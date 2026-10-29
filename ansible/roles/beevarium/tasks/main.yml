@@ -1,0 +1,52 @@
+---
+- name: Verify required project files
+  ansible.builtin.stat:
+    path: "{{ beevarium_repo_root }}/{{ item }}"
+  loop:
+    - docker-compose.yml
+    - scripts/linux/wait_for_api.sh
+    - scripts/linux/bootstrap_demo_data.sh
+    - scripts/linux/gate_fast.sh
+  register: beevarium_required_files
+  changed_when: false
+
+- name: Summarize required project files
+  ansible.builtin.debug:
+    msg: "{{ item.item }}: {{ 'present' if item.stat.exists else 'missing' }}"
+  loop: "{{ beevarium_required_files.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+
+- name: Stop when project files are missing
+  ansible.builtin.assert:
+    that: "item.stat.exists"
+    fail_msg: "Missing required Beevarium file: {{ item.item }}"
+  loop: "{{ beevarium_required_files.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+
+- name: Start local Docker stack
+  ansible.builtin.command:
+    cmd: "docker compose --env-file {{ beevarium_env_file }} up -d --build"
+    chdir: "{{ beevarium_repo_root }}"
+  changed_when: true
+
+- name: Wait for API health
+  ansible.builtin.command:
+    cmd: "bash scripts/linux/wait_for_api.sh --api-base-url {{ beevarium_api_base_url }}"
+    chdir: "{{ beevarium_repo_root }}"
+  changed_when: false
+
+- name: Bootstrap local demo access
+  ansible.builtin.command:
+    cmd: "bash scripts/linux/bootstrap_demo_data.sh --premium --output-json-path artifacts/demo-access.json"
+    chdir: "{{ beevarium_repo_root }}"
+  when: beevarium_bootstrap_demo | bool
+  changed_when: true
+
+- name: Run full Linux gate
+  ansible.builtin.command:
+    cmd: "bash scripts/linux/gate_fast.sh --full-integration --api-base-url {{ beevarium_api_base_url }}"
+    chdir: "{{ beevarium_repo_root }}"
+  when: beevarium_run_gate | bool
+  changed_when: false

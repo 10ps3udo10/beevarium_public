@@ -1,0 +1,7 @@
+---
+caddy_beta_domain: beta.beevarium.fr
+caddy_site_domains: [beevarium.fr, www.beevarium.fr]
+caddy_beta_upstream: 127.0.0.1:18000
+caddy_site_root: /var/www/beevarium
+caddy_apt_key_url: https://dl.cloudsmith.io/public/caddy/stable/gpg.key
+caddy_apt_repo_url: https://dl.cloudsmith.io/public/caddy/stable/deb/debian

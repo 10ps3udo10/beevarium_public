@@ -1,0 +1,13 @@
+---
+- name: Beevarium local lifecycle
+  hosts: beevarium
+  gather_facts: false
+  vars:
+    beevarium_repo_root: "{{ playbook_dir }}/.."
+    beevarium_env_file: .env
+    beevarium_api_base_url: http://localhost:8000
+    beevarium_run_migrations: false
+    beevarium_bootstrap_demo: true
+    beevarium_run_gate: true
+  roles:
+    - beevarium

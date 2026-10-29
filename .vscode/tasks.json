@@ -1,0 +1,203 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Smoke API strict (avant push)",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "scripts/linux/smoke_api.sh",
+        "--strict-revocation",
+        "--output-json-path",
+        "artifacts/smoke-result.json"
+      ],
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Donnees de demo + acces client",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "scripts/linux/bootstrap_demo_data.sh",
+        "--premium",
+        "--output-json-path",
+        "artifacts/demo-access.json"
+      ],
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Valider le rapport smoke",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "scripts/linux/validate_smoke_json.sh",
+        "artifacts/smoke-result.json"
+      ],
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Gate rapide",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "scripts/linux/gate_fast.sh",
+        "--api-base-url",
+        "http://localhost:8000"
+      ],
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Gate complet",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "scripts/linux/gate_fast.sh",
+        "--full-integration",
+        "--api-base-url",
+        "http://localhost:8000"
+      ],
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Gate release candidate",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "scripts/linux/gate_release_candidate.sh",
+        "artifacts/v1-readiness.json",
+        "http://localhost:8000"
+      ],
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Preparer les notes de version",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "scripts/linux/prepare_patch_release.sh",
+        "v1.0.0",
+        "HEAD",
+        "artifacts/patch-release-notes.md"
+      ],
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Deploiement : construire l'image",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "scripts/linux/deploy_build_image.sh",
+        "v1.0.1-rc1"
+      ],
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Deploiement : appliquer les migrations",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "scripts/linux/deploy_apply_migrations.sh",
+        ".env.target"
+      ],
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Deploiement : livrer",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "scripts/linux/deploy_release.sh",
+        "v1.0.1-rc1",
+        ".env.target"
+      ],
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Deploiement : smoke strict",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "scripts/linux/smoke_api.sh",
+        "--api-base-url",
+        "http://localhost:18000",
+        "--strict-revocation",
+        "--output-json-path",
+        "artifacts/target-smoke-result.json"
+      ],
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Deploiement : sauvegarder la base",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "scripts/linux/deploy_backup_db.sh",
+        ".env.target",
+        "artifacts/backups"
+      ],
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Deploiement : supervision",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "scripts/linux/deploy_health_watch.sh",
+        "http://localhost:18000",
+        "6",
+        "artifacts/health-watch.json"
+      ],
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Deploiement : publier les notes",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "scripts/linux/deploy_publish_release_notes.sh",
+        "v1.0.0",
+        "HEAD",
+        "artifacts/releases"
+      ],
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Deploiement : rollback",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "scripts/linux/deploy_rollback.sh",
+        ".env.target"
+      ],
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Cycle d'increment",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "scripts/linux/release_increment_cycle.sh",
+        "http://localhost:8000",
+        "v1.0.0",
+        "HEAD"
+      ],
+      "problemMatcher": [],
+      "group": "test"
+    }
+  ]
+}

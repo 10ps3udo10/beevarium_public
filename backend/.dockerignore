@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+.env
+*.egg-info/
+# Identifiants du compte de demonstration local : copies dans le conteneur par
+# bootstrap_demo_data.sh, jamais integres a une image.
+app/static/app/demo-access.json

@@ -1,0 +1,7 @@
+[Unit]
+Description=Beevarium - sauvegarde quotidienne de la base
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/app
+ExecStart=/bin/bash scripts/linux/backup_daily.sh .env.target artifacts/backups

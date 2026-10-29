@@ -1,0 +1,21 @@
+---
+- name: Politique entrante par defaut
+  community.general.ufw:
+    default: deny
+    direction: incoming
+
+- name: Politique sortante par defaut
+  community.general.ufw:
+    default: allow
+    direction: outgoing
+
+- name: Autoriser SSH, HTTP et HTTPS
+  community.general.ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop: "{{ firewall_allowed_ports }}"
+
+- name: Activer UFW
+  community.general.ufw:
+    state: enabled

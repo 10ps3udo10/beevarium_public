@@ -1,0 +1,9 @@
+---
+beevarium_user_name: beevarium
+beevarium_user_site_root: /var/www/beevarium
+beevarium_user_clone_dir: "/home/{{ beevarium_user_name }}/app"
+# Les timers hors site (offsite) restent geres par scripts/linux/configure_offsite.sh.
+beevarium_user_timers:
+  - beevarium-backup.timer
+  - beevarium-backup-verify.timer
+  - beevarium-watchdog.timer

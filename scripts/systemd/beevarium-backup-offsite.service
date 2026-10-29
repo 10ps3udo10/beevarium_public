@@ -1,0 +1,7 @@
+[Unit]
+Description=Beevarium - copie chiffree des sauvegardes hors site
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/app
+ExecStart=/bin/bash scripts/linux/backup_offsite.sh .env.target artifacts/backups

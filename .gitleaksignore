@@ -1,0 +1,8 @@
+# Faux positifs verifies le 2026-10-28 : mots de passe factices des tests
+# d'integration et exemple de la reference API (aucun secret reel).
+a91cf58c00c296ef77d121408144ec6c6b85ecf2:backend/tests/integration/test_api_integration.py:generic-api-key:2733
+a91cf58c00c296ef77d121408144ec6c6b85ecf2:backend/tests/integration/test_api_integration.py:generic-api-key:2750
+a91cf58c00c296ef77d121408144ec6c6b85ecf2:backend/tests/integration/test_api_integration.py:generic-api-key:2757
+e53b3df727a27e4f30b43e86776b1bd206089001:docs/08-reference-api.md:generic-api-key:93
+09fa682ca31a15336497d95425727cd12dd882ce:backend/app/schemas.py:generic-api-key:92
+09fa682ca31a15336497d95425727cd12dd882ce:backend/tests/integration/test_api_integration.py:generic-api-key:2409

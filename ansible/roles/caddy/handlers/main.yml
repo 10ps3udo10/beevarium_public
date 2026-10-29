@@ -1,0 +1,5 @@
+---
+- name: Recharger Caddy
+  ansible.builtin.service:
+    name: caddy
+    state: reloaded

@@ -1,0 +1,3 @@
+---
+ssh_hardening_admin_user: beevarium
+ssh_hardening_max_auth_tries: 3
